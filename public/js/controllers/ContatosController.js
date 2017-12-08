@@ -1,29 +1,30 @@
-angular.module('contatooh').controller('ContatosController', 
-function ($scope, $http) {
+angular.module('contatooh').controller('ContatosController',
+  function ($resource, $scope) {
 
-  $scope.total = 0;
+    $scope.total = 0;
 
-  $scope.incrementa = function () {
-    $scope.total++;
-  };
-  $scope.contatos = [{
-      "_id": 1,
-      "nome": "Contato Angular 1",
-      "email": "cont1@empresa.com.br"
-    },
-    {
-      "_id": 2,
-      "nome": "Contato Angular 2",
-      "email": "cont2@empresa.com.br"
-    },
-    {
-      "_id": 3,
-      "nome": "Contato Angular 3",
-      "email": "cont3@empresa.com.br"
+    $scope.filtro = '';
+
+    $scope.contatos = [];
+
+    $scope.incrementa = function () {
+      $scope.total++;
+    };
+
+    var Contato = $resource('/contatos');
+
+    var promise = Contato.query().$promise;
+
+    function buscaContatos() {
+      Contato.query(
+        function (contatos) {
+          $scope.contatos = contatos;
+        },
+        function (error) {
+          console.log("Nao foi possivel receber a lista de contatos através da REST API")
+          console.log(error);
+        }
+      );
     }
-  ];
-
-  $scope.filtro = '';
-
-
-});
+    buscaContatos();
+  });
