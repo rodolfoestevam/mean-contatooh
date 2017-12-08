@@ -1,17 +1,21 @@
-angular.module('contatooh').controller('ContatosController',
-  function ($resource, $scope) {
+angular
+  .module('contatooh')
+  .controller('ContatosController',
+  
+  function (Contato, $scope, $resource) {
 
     $scope.total = 0;
-
     $scope.filtro = '';
-
+    $scope.mensagem = {
+      texto: ''
+    };
     $scope.contatos = [];
 
     $scope.incrementa = function () {
       $scope.total++;
     };
 
-    var Contato = $resource('/contatos');
+    var Contato = $resource('/contatos/:id');
 
     var promise = Contato.query().$promise;
 
@@ -27,4 +31,18 @@ angular.module('contatooh').controller('ContatosController',
       );
     }
     buscaContatos();
+
+    $scope.remove = function (contato) {
+      Contato.delete({
+          id: contato._id
+        },
+        buscaContatos,
+        function (erro) {
+          $scope.mensagem = {
+            texto: 'Não foi possível remover o contato'
+          };
+          console.log(erro);
+        }
+      );
+    };
   });
