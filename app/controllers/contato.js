@@ -19,11 +19,15 @@ var contatos = [{
 
 module.exports = function () {
 
+    var Contato = app.models.contato;
     var controller = {};
-    controller.listaContatos = function (req, res) {
-        res.json(contatos);
-    };
 
+    controller.listaContatos = function (req, res) {
+        Contato.find().exec()
+        .then(function(contatos){
+            res.json(contatos);
+        })
+    };
 
     controller.obtemContato = function (req, res) {
 
