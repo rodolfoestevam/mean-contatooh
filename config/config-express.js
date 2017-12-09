@@ -15,7 +15,7 @@ module.exports = function () {
     app.set('view engine', 'ejs');
     app.set('views', './app/views');
 
-    load('models', {cwd: 'app'})
+    load('model', {cwd: 'app'})
         .then('controllers')
         .then('routes')
         .into(app);
